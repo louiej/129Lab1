@@ -1,17 +1,19 @@
+
+import infixtopostfix.InfixToPostfix;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
-
 /**
  *
  * @author LJR
  */
 public class gui extends javax.swing.JFrame {
-     Openfile of = new Openfile();
+
+    Openfile of = new Openfile();
+
     /**
      * Creates new form gui
      */
@@ -87,23 +89,37 @@ public class gui extends javax.swing.JFrame {
 
     private void openfilebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openfilebtnActionPerformed
         // TODO add your handling code here:
-       
-        
-            try {
-                of.PickMe();
-                jTextArea1.setText("\nFile loaded.\n");
-                jTextArea1.setText(of.fileChooser.getSelectedFile().getAbsolutePath());
-            } catch(Exception e){
-                e.printStackTrace();
-            }
-        
+
+        try {
+            of.PickMe();
+            jTextArea1.setText("\nFile loaded.\n");
+            jTextArea1.setText(of.fileChooser.getSelectedFile().getAbsolutePath());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }//GEN-LAST:event_openfilebtnActionPerformed
 
-     private void processbtnActionPerformed(java.awt.event.ActionEvent evt) {
-     
-           jTextArea1.setText(of.sb.toString());
-     }
-     
+    private void processbtnActionPerformed(java.awt.event.ActionEvent evt) {
+        String[] lines;
+        String outputPostfix;
+        InfixToPostfix converter;
+
+        lines = of.sb.toString().split("\n");
+        outputPostfix = "";
+        converter = new InfixToPostfix();
+
+        for (String testString1 : lines) {
+            System.out.println("infix: " + testString1);
+
+            String line;
+            line = converter.convertToPostfix(testString1);
+            System.out.println("postfix: " + line);
+            outputPostfix += line + "\n";
+        }
+        jTextArea1.setText(outputPostfix);
+    }
+
     /**
      * @param args the command line arguments
      */
