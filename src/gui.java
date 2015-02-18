@@ -91,6 +91,8 @@ public class gui extends javax.swing.JFrame {
         
             try {
                 of.PickMe();
+                jTextArea1.setText("\nFile loaded.\n");
+                jTextArea1.setText(of.fileChooser.getSelectedFile().getAbsolutePath());
             } catch(Exception e){
                 e.printStackTrace();
             }
