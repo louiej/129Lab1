@@ -12,7 +12,11 @@
  */
 public class gui extends javax.swing.JFrame {
      Openfile of = new Openfile();
-    /**
+     int cntr = 1;
+     int num = 1;
+     String temp = null; // temp and temp2 for same file error trapping
+     String temp2 = null;
+     /**
      * Creates new form gui
      */
     public gui() {
@@ -88,15 +92,30 @@ public class gui extends javax.swing.JFrame {
     private void openfilebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openfilebtnActionPerformed
         // TODO add your handling code here:
        
-        
-            try {
-                of.PickMe();
-                jTextArea1.setText("\nFile loaded.\n");
-                jTextArea1.setText(of.fileChooser.getSelectedFile().getAbsolutePath());
-            } catch(Exception e){
-                e.printStackTrace();
-            }
-        
+      
+            
+            
+             
+                try {
+                    cntr++;
+                    of.PickMe(); // open select file dialog
+                    
+                        if (num % 2 == 0){
+                        temp = of.fileChooser.getSelectedFile().getAbsolutePath();
+                        }
+                        else {temp2 = of.fileChooser.getSelectedFile().getAbsolutePath();}
+                 jTextArea1.setText( "File named " + of.fileChooser.getSelectedFile().getName() + " was loaded successfully.\n");       
+                } catch(Exception e){
+                    e.printStackTrace();
+                }
+                
+                if (temp == temp2 ){
+                    jTextArea1.setText("You are trying to load the same file.");
+
+                             
+                }
+            
+            num++;
     }//GEN-LAST:event_openfilebtnActionPerformed
 
      private void processbtnActionPerformed(java.awt.event.ActionEvent evt) {
