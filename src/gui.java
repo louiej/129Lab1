@@ -1,6 +1,9 @@
 
 import infixtopostfix.InfixToPostfix;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import postfix.ExpressionFormatException;
+import postfix.Postfix;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -123,9 +126,10 @@ public class gui extends javax.swing.JFrame {
     }//GEN-LAST:event_openfilebtnActionPerformed
 
      private void processbtnActionPerformed(java.awt.event.ActionEvent evt) {
-        String[] lines;
-        String outputPostfix;
+        String[] lines, postfixString;
+        String outputPostfix, line;
         InfixToPostfix converter;
+        Postfix example;
 
         lines = of.sb.toString().split("\n");
         outputPostfix = "";
@@ -134,11 +138,27 @@ public class gui extends javax.swing.JFrame {
         for (String testString1 : lines) {
             System.out.println("infix: " + testString1);
 
-            String line;
             line = converter.convertToPostfix(testString1);
             System.out.println("postfix: " + line);
             outputPostfix += line + "\n";
         }
+        
+        postfixString = outputPostfix.split("\n");
+        
+        /*
+        * Conversion 
+        */
+        
+        example = new Postfix();
+        
+        for (String testString1 : postfixString) {
+            try {
+                System.out.println(example.computePostfix(testString1));
+            } catch (ExpressionFormatException ex) {
+                Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
         jTextArea1.setText(outputPostfix);
      }
      

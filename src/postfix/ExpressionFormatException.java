@@ -9,7 +9,7 @@ package postfix;
  *
  * @author Selene
  */
-class ExpressionFormatException extends Exception {
+public class ExpressionFormatException extends Exception {
 
     public ExpressionFormatException() {
         super();

@@ -1,6 +1,5 @@
 package postfix;
 
-import java.io.*;
 import java.util.*;
 
 /**
@@ -9,7 +8,7 @@ import java.util.*;
  */
 public class Postfix {
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 
         System.out.println("Type a postfix expression (to quit, type q)");
 
@@ -33,7 +32,7 @@ public class Postfix {
             }
         } while (!quit);
     }
-
+    */
     /**
      * Evaluates a postfix expression
      *
@@ -41,7 +40,7 @@ public class Postfix {
      * @return the integer value of the expression
      * @throws ExpressionFormatException if the postfix expression is invalid
      */
-    public static int computePostfix(String postfix) throws ExpressionFormatException {
+    public  int computePostfix(String postfix) throws ExpressionFormatException {
 
         try {
             Stack<Integer> stack = new Stack<>();
@@ -91,7 +90,7 @@ public class Postfix {
      * two operands on the stack. The operand(s) is/are popped from the stack.
      * The result is pushed on the stack
      */
-    private static void applyOperator(String operator, Stack<Integer> s) {
+    public  void applyOperator(String operator, Stack<Integer> s) {
         int op1 = s.pop();
         switch (operator) {
             case "u-":
@@ -127,7 +126,7 @@ public class Postfix {
         }
     }
 
-    public static boolean isChars(String t){
+    public  boolean isChars(String t){
         return Character.isDigit(t.charAt(0))==false;
     }
 
