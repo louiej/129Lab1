@@ -2,7 +2,6 @@
 import infixtopostfix.InfixToPostfix;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import postfix.ExpressionFormatException;
 import postfix.Postfix;
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -148,15 +147,11 @@ public class gui extends javax.swing.JFrame {
         /*
         * Conversion 
         */
-        
+        String qwe="";
         example = new Postfix();
         
         for (String testString1 : postfixString) {
-            try {
-                System.out.println(example.computePostfix(testString1));
-            } catch (ExpressionFormatException ex) {
-                Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                System.out.println("answer" + example.computePostfix(testString1));
         }
         
         jTextArea1.setText(outputPostfix);

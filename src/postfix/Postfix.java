@@ -7,6 +7,8 @@ import java.util.*;
  * @author Selene
  */
 public class Postfix {
+    
+    HashMap sTable = new HashMap();
 
     /*public static void main(String[] args) {
 
@@ -40,10 +42,9 @@ public class Postfix {
      * @return the integer value of the expression
      * @throws ExpressionFormatException if the postfix expression is invalid
      */
-    public  int computePostfix(String postfix) throws ExpressionFormatException {
+    public  int computePostfix(String postfix)  {
 
-        try {
-            Stack<Integer> stack = new Stack<>();
+            Stack<String> stack = new Stack<>();
             StringTokenizer st = new StringTokenizer(postfix);
             while (st.hasMoreTokens()) {
                 String token = st.nextToken();
@@ -63,17 +64,11 @@ public class Postfix {
                     break;
                 }
                 else { // an operand
-                    stack.push(new Integer(token));
+                    stack.push(token);
                 }
             }
-            int result = stack.pop();
-            if (!stack.isEmpty()) { // the stack should be empty
-                throw new ExpressionFormatException();
-            }
+            int result = Integer.parseInt(stack.pop());
             return result;
-        } catch (EmptyStackException | NumberFormatException ese) {
-            throw new ExpressionFormatException();
-        }
     }
 
     /**
@@ -90,39 +85,70 @@ public class Postfix {
      * two operands on the stack. The operand(s) is/are popped from the stack.
      * The result is pushed on the stack
      */
-    public  void applyOperator(String operator, Stack<Integer> s) {
-        int op1 = s.pop();
+    public void applyOperator(String operator, Stack<String> s) {
+        int val1 = 0, val2 = 0;
+        String op1 = s.pop();
         switch (operator) {
             case "u-":
-                s.push(-op1);
+                s.push("-"+op1);
                 break;
             case "u+":
                 s.push(op1);
                 break;
             default:
                 // binary operator
-                int op2 = s.pop();
+                String op2 = s.pop();
+                
+                if(op1.contains("[a-zA-z]+")) {
+                    if(sTable.containsKey(op1)) {
+                        val2 = (Integer) sTable.get(op1);
+                    }
+                    else {
+                    }
+                }
+                else {
+                    System.out.println("value" + op1);
+                    val2 = Integer.parseInt(op1);
+                }
+                if(op2.contains("[a-zA-z]+")) {
+                    if(sTable.containsKey(op2)) {
+                        System.out.println("sTable");
+                        val1 = (Integer) sTable.get(op2);
+                    }
+                    else {
+                        System.out.println("123");
+                    }
+                }
+                else {
+                    System.out.println("value" + op2);
+                    val1 = Integer.parseInt(op2);
+                }
                 int result;
+                System.out.println("val1: " + val2 + "val2: " + val1 + "\n");
+                    
                 switch (operator) {
+                    case "=":
+                        sTable.put(val2, val1);
+                        result = val1;
                     case "+":
-                        result = op2 + op1;
+                        result = val2 + val1;
                         break;
                     case "-":
-                        result = op2 - op1;
+                        result = val2 - val1;
                         break;
                     case "/":
-                        result = op2 / op1;
+                        result = val2 / val1;
                         break;
                     case "%":
-                        result = op2 % op1;
+                        result = val2 % val1;
                         break;
                     case "*":
-                        result = op2 * op1;
+                        result = val2 * val1;
                         break;
                     default:
                         throw new IllegalArgumentException();
                 }
-                s.push(result);
+                s.push(result+"");
         }
     }
 
