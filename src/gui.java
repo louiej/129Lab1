@@ -147,14 +147,17 @@ public class gui extends javax.swing.JFrame {
         /*
         * Conversion 
         */
-        String qwe="";
+        
+        String textGUI="";
         example = new Postfix();
         
         for (String testString1 : postfixString) {
-                System.out.println("answer" + example.computePostfix(testString1));
+                String temp= "Postfix: "+ testString1 + "\n" + "Evaluation: " + example.computePostfix(testString1)+"\n";
+                textGUI +=temp;
+                //System.out.println("answer" + example.computePostfix(testString1));
         }
         
-        jTextArea1.setText(outputPostfix);
+        jTextArea1.setText(textGUI);
      }
      
     /**

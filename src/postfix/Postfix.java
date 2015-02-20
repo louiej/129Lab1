@@ -10,31 +10,6 @@ public class Postfix {
     
     HashMap sTable = new HashMap();
 
-    /*public static void main(String[] args) {
-
-        System.out.println("Type a postfix expression (to quit, type q)");
-
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-
-        String input; // line input by the user
-        boolean quit = false;
-
-        do {
-            try {
-                System.out.print(">"); // prompt
-                input = in.readLine(); // each nos. and operators should be separated by a space
-                if (input.equals("q")) {
-                    quit = true;
-                } else {
-                    String postfix = input;
-                    System.out.println(computePostfix(postfix));
-                }
-            } catch (IOException | ExpressionFormatException e) {
-                System.out.println("Invalid expression");
-            }
-        } while (!quit);
-    }
-    */
     /**
      * Evaluates a postfix expression
      *
@@ -48,27 +23,43 @@ public class Postfix {
             StringTokenizer st = new StringTokenizer(postfix);
             while (st.hasMoreTokens()) {
                 String token = st.nextToken();
+                System.out.println("token " +token + "\n");
                 if (token.equals("*")
                         || // an operator
                         token.equals("+") || token.equals("-")
                         || token.equals("%") || token.equals("/")
-                        || token.equals("u+") || token.equals("u-"))
+                        || token.equals("u+") || token.equals("u-")
+                        || token.equals("="))
                  {
                     applyOperator(token, stack);
                 }
-                else if(token.equals("=")){
-                    break;
-                }
+                /*
                 else if (isChars(token)==true){
-                    System.out.println(token);
-                    break;
+                      break;
                 }
+                */
                 else { // an operand
                     stack.push(token);
                 }
             }
-            int result = Integer.parseInt(stack.pop());
-            return result;
+            
+            String result = stack.pop();
+            
+            System.out.println("peek" + result);
+             if(result.contains("[a-zA-Z]+")) {
+                    if(sTable.containsKey(result)) {
+                        return (Integer) sTable.get(result);
+                    }
+                    else {
+                    }
+                }
+                else {
+                    System.out.println("value" + result);
+                    return Integer.parseInt(result);
+                }
+        return 0;
+            
+            
     }
 
     /**
@@ -97,55 +88,61 @@ public class Postfix {
                 break;
             default:
                 // binary operator
-                String op2 = s.pop();
-                
-                if(op1.contains("[a-zA-z]+")) {
+                String op2 = s.pop();                
+                if(op1.matches("[a-zA-Z]+")) {
                     if(sTable.containsKey(op1)) {
-                        val2 = (Integer) sTable.get(op1);
+                        val1 = (Integer) sTable.get(op1);
                     }
                     else {
                     }
                 }
                 else {
-                    System.out.println("value" + op1);
-                    val2 = Integer.parseInt(op1);
+                    System.out.println("value1" + op1);
+                    val1 = Integer.parseInt(op1);
                 }
-                if(op2.contains("[a-zA-z]+")) {
+                if(op2.matches("[a-zA-Z]+")) {
                     if(sTable.containsKey(op2)) {
                         System.out.println("sTable");
-                        val1 = (Integer) sTable.get(op2);
+                        val2 = (Integer) sTable.get(op2);
                     }
                     else {
                         System.out.println("123");
                     }
                 }
                 else {
-                    System.out.println("value" + op2);
-                    val1 = Integer.parseInt(op2);
+                    System.out.println("value2" + op2);
+                    val2 = Integer.parseInt(op2);
                 }
-                int result;
-                System.out.println("val1: " + val2 + "val2: " + val1 + "\n");
+                int result = 0;
+                //System.out.println("val1: " + val2 + "val2: " + val1 + "\n");
                     
                 switch (operator) {
                     case "=":
                         sTable.put(val2, val1);
+                        System.out.println("ASSIGN");
                         result = val1;
                     case "+":
+                        System.out.println("ADD");
                         result = val2 + val1;
                         break;
                     case "-":
+                        System.out.println("SUB");
                         result = val2 - val1;
                         break;
                     case "/":
+                        System.out.println("DIV");
                         result = val2 / val1;
                         break;
                     case "%":
+                        System.out.println("MOD");
                         result = val2 % val1;
                         break;
                     case "*":
+                        System.out.println("DIV");
                         result = val2 * val1;
                         break;
                     default:
+                        System.out.println(result+"\n");
                         throw new IllegalArgumentException();
                 }
                 s.push(result+"");
