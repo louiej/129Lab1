@@ -7,7 +7,7 @@ import java.util.*;
  * @author Selene
  */
 public class Postfix {
-    
+
     HashMap sTable = new HashMap();
 
     /**
@@ -17,49 +17,43 @@ public class Postfix {
      * @return the integer value of the expression
      * @throws ExpressionFormatException if the postfix expression is invalid
      */
-    public  int computePostfix(String postfix)  {
+    public int computePostfix(String postfix) {
 
-            Stack<String> stack = new Stack<>();
-            StringTokenizer st = new StringTokenizer(postfix);
-            while (st.hasMoreTokens()) {
-                String token = st.nextToken();
-                System.out.println("token " +token + "\n");
-                if (token.equals("*")
-                        || // an operator
-                        token.equals("+") || token.equals("-")
-                        || token.equals("%") || token.equals("/")
-                        || token.equals("u+") || token.equals("u-")
-                        || token.equals("="))
-                 {
-                    applyOperator(token, stack);
-                }
-                /*
-                else if (isChars(token)==true){
-                      break;
-                }
-                */
-                else { // an operand
-                    stack.push(token);
-                }
+        Stack<String> stack = new Stack<>();
+        StringTokenizer st = new StringTokenizer(postfix);
+        while (st.hasMoreTokens()) {
+            String token = st.nextToken();
+            //System.out.println("token " +token + "\n");
+            if (token.equals("*")
+                    || // an operator
+                    token.equals("+") || token.equals("-")
+                    || token.equals("%") || token.equals("/")
+                    || token.equals("u+") || token.equals("u-")
+                    || token.equals("=")) {
+                applyOperator(token, stack);
+            } /*
+             else if (isChars(token)==true){
+             break;
+             }
+             */ else { // an operand
+                stack.push(token);
             }
-            
-            String result = stack.pop();
-            
-            System.out.println("peek" + result);
-             if(result.contains("[a-zA-Z]+")) {
-                    if(sTable.containsKey(result)) {
-                        return (Integer) sTable.get(result);
-                    }
-                    else {
-                    }
-                }
-                else {
-                    System.out.println("value" + result);
-                    return Integer.parseInt(result);
-                }
+        }
+
+        String result = stack.pop();
+
+        //System.out.println("peek" + result);
+        if (result.contains("[a-zA-Z]+")) {
+            if (sTable.containsKey(result)) {
+                return (Integer) sTable.get(result);
+            } else {
+            }
+        } else {
+            //System.out.println("value" + result);
+            return Integer.parseInt(result);
+        }
         return 0;
-            
-            
+
     }
 
     /**
@@ -81,76 +75,101 @@ public class Postfix {
         String op1 = s.pop();
         switch (operator) {
             case "u-":
-                s.push("-"+op1);
+                s.push("-" + op1);
                 break;
             case "u+":
                 s.push(op1);
                 break;
             default:
                 // binary operator
-                String op2 = s.pop();                
-                if(op1.matches("[a-zA-Z]+")) {
-                    if(sTable.containsKey(op1)) {
+                String op2 = s.pop();
+                if (op1.matches("[a-zA-Z]+")) {
+                    if (sTable.containsKey(op1)) {
                         val1 = (Integer) sTable.get(op1);
+                    } else {
+
                     }
-                    else {
-                    }
-                }
-                else {
-                    System.out.println("value1" + op1);
+                } else {
+                    //System.out.println("value1" + op1);
                     val1 = Integer.parseInt(op1);
                 }
-                if(op2.matches("[a-zA-Z]+")) {
-                    if(sTable.containsKey(op2)) {
-                        System.out.println("sTable");
+                if (op2.matches("[a-zA-Z]+")) {
+                    if (sTable.containsKey(op2)) {
+                        //System.out.println("sTable");
                         val2 = (Integer) sTable.get(op2);
+                    } else {
+                        sTable.remove(op2);
+                        sTable.put(op2, val1);
                     }
-                    else {
-                        System.out.println("123");
-                    }
-                }
-                else {
-                    System.out.println("value2" + op2);
+                } else {
+                    //System.out.println("value2" + op2);
                     val2 = Integer.parseInt(op2);
                 }
                 int result = 0;
                 //System.out.println("val1: " + val2 + "val2: " + val1 + "\n");
-                    
+
                 switch (operator) {
                     case "=":
                         sTable.put(val2, val1);
-                        System.out.println("ASSIGN");
+                        System.out.println(val2 + "=" + val1);
                         result = val1;
+                        break;
                     case "+":
-                        System.out.println("ADD");
+                        System.out.println(val2 + "+" + val1);
                         result = val2 + val1;
                         break;
                     case "-":
-                        System.out.println("SUB");
+                        System.out.println(val2 + "-" + val1);
                         result = val2 - val1;
                         break;
                     case "/":
-                        System.out.println("DIV");
+                        System.out.println(val2 + "/" + val1);
                         result = val2 / val1;
                         break;
                     case "%":
-                        System.out.println("MOD");
+                        System.out.println(val2 + "%" + val1);
                         result = val2 % val1;
                         break;
                     case "*":
-                        System.out.println("DIV");
+                        System.out.println(val2 + "*" + val1);
                         result = val2 * val1;
                         break;
                     default:
-                        System.out.println(result+"\n");
+                        System.out.println(result + "\n");
                         throw new IllegalArgumentException();
                 }
-                s.push(result+"");
+                System.out.println("\n");
+                s.push(result + "");
         }
     }
 
-    public  boolean isChars(String t){
-        return Character.isDigit(t.charAt(0))==false;
+    public boolean isChars(String t) {
+        return Character.isDigit(t.charAt(0)) == false;
+    }
+
+    public String getKeyValues() {
+        /*
+         String keyValues = "";
+         for (Object key : sTable.keySet()) {
+         System.out.println("Key = " + key);
+         }
+
+         //iterating over values only
+         for (Object value : sTable.values()) {
+         System.out.println("Value = " + value);
+         }
+         */
+        Iterator<Map.Entry> entries = sTable.entrySet().iterator();
+        String hashData;
+        hashData = "\n\nVariables: \n";
+        while (entries.hasNext()) {
+            Map.Entry entry = entries.next();
+            if (entry.getKey().toString().matches("[a-zA-Z]+")) {
+                hashData += entry.getKey() + " = " + entry.getValue() + "\n";
+            }
+        }
+
+        return hashData;
     }
 
 }

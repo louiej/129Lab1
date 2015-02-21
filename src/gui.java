@@ -1,5 +1,6 @@
 
 import infixtopostfix.InfixToPostfix;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import postfix.Postfix;
@@ -9,19 +10,18 @@ import postfix.Postfix;
  * and open the template in the editor.
  */
 
-
-
 /**
  *
  * @author LJR
  */
 public class gui extends javax.swing.JFrame {
 
-     Openfile of = new Openfile();
-     int cntr = 1;
-     int num = 1;
-     String temp = null; // temp and temp2 for same file error trapping
-     String temp2 = null;
+    Openfile of = new Openfile();
+    int cntr = 1;
+    int num = 1;
+    String temp = null; // temp and temp2 for same file error trapping
+    String temp2 = null;
+
     /**
      * Creates new form gui
      */
@@ -97,34 +97,30 @@ public class gui extends javax.swing.JFrame {
 
     private void openfilebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openfilebtnActionPerformed
         // TODO add your handling code here:
-       
-        
-            
-            
-             
-            try {
-                    cntr++;
-                    of.PickMe(); // open select file dialog
-                    
-                        if (num % 2 == 0){
-                        temp = of.fileChooser.getSelectedFile().getAbsolutePath();
-                        }
-                        else {temp2 = of.fileChooser.getSelectedFile().getAbsolutePath();}
-                 jTextArea1.setText( "File named " + of.fileChooser.getSelectedFile().getName() + " was loaded successfully.\n");       
-            } catch(Exception e){
-                e.printStackTrace();
-            }
-        
-                if (temp == temp2 ){
-                    jTextArea1.setText("You are trying to load the same file.");
 
-                             
-                }
-            
-            num++;
+        try {
+            cntr++;
+            of.PickMe(); // open select file dialog
+
+            if (num % 2 == 0) {
+                temp = of.fileChooser.getSelectedFile().getAbsolutePath();
+            } else {
+                temp2 = of.fileChooser.getSelectedFile().getAbsolutePath();
+            }
+            jTextArea1.setText("File named " + of.fileChooser.getSelectedFile().getName() + " was loaded successfully.\n");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (temp == temp2) {
+            jTextArea1.setText("You are trying to load the same file.");
+
+        }
+
+        num++;
     }//GEN-LAST:event_openfilebtnActionPerformed
 
-     private void processbtnActionPerformed(java.awt.event.ActionEvent evt) {
+    private void processbtnActionPerformed(java.awt.event.ActionEvent evt) {
         String[] lines, postfixString;
         String outputPostfix, line;
         InfixToPostfix converter;
@@ -133,33 +129,39 @@ public class gui extends javax.swing.JFrame {
         lines = of.sb.toString().split("\n");
         outputPostfix = "";
         converter = new InfixToPostfix();
-     
-        for (String testString1 : lines) {
-            System.out.println("infix: " + testString1);
 
+        for (String testString1 : lines) {
+            //System.out.println("infix: " + testString1);
             line = converter.convertToPostfix(testString1);
-            System.out.println("postfix: " + line);
+            //System.out.println("postfix: " + line);
             outputPostfix += line + "\n";
         }
-        
+
         postfixString = outputPostfix.split("\n");
-        
+
         /*
-        * Conversion 
-        */
-        
-        String textGUI="";
+         * Conversion 
+         */
+        String textGUI = "";
         example = new Postfix();
-        
+
         for (String testString1 : postfixString) {
-                String temp= "Postfix: "+ testString1 + "\n" + "Evaluation: " + example.computePostfix(testString1)+"\n";
-                textGUI +=temp;
-                //System.out.println("answer" + example.computePostfix(testString1));
+            String tempStr = "Postfix: " + testString1 + "\n" + "Evaluation: " + example.computePostfix(testString1) + "\n";
+            textGUI += tempStr;
+            System.out.println("answer" + example.computePostfix(testString1));
         }
-        
+
+        textGUI += example.getKeyValues();
         jTextArea1.setText(textGUI);
-     }
-     
+        //File file = new File(of.fileChooser.getSelectedFile().getParent() + "/output.out");
+        // OutputStream out = new FileOutputStream(file);
+        try (PrintWriter writer = new PrintWriter((of.fileChooser.getSelectedFile().getParent() + "/output.out"), "UTF-8")) {
+            //File file = new File(of.fileChooser.getSelectedFile().getParent() + "/output.out");
+            // OutputStream out = new FileOutputStream(file);
+            writer.print(textGUI);
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
